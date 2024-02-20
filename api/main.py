@@ -4,6 +4,7 @@ from fastapi.responses import HTMLResponse
 
 from subprocess import Popen, PIPE, STDOUT
 import shlex
+import asyncio
 
 # Create an instance of the FastAPI class
 app = FastAPI()
@@ -42,10 +43,15 @@ def apt_file_search(filename_str: str) -> str:
     ]
 
 
+# Async wrapper for the synchronous `apt_file_search` function
+async def async_apt_file_search(filename_str: str) -> list:
+    return await asyncio.to_thread(apt_file_search, filename_str)
+
+
 @app.get("/query_api")
 async def read_query_api(q: str = None):
     if q:
-        output = {"results": apt_file_search(q)}
+        output = {"results": await apt_file_search(q)}
     else:
         output = {"results": []}
 
