@@ -13,7 +13,7 @@ app = FastAPI()
 # You can use "*" to allow all origins or be more specific to enhance security
 origins = [
     "http://localhost:8000",  # Allow requests from a local React dev server
-    "https://aptfilesearch-api.oxfordfun.com",  # Adjust to your production React app's domain
+    "https://api.aptfilesearch.oxfordfun.com",  # Adjust to your production React app's domain
 ]
 
 app.add_middleware(
