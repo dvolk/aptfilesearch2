@@ -5,7 +5,7 @@ from fastapi.responses import HTMLResponse
 from subprocess import Popen, PIPE, STDOUT
 import shlex
 import asyncio
-from functoools import cache
+from functools import cache
 
 # Create an instance of the FastAPI class
 app = FastAPI()
