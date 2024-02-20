@@ -25,10 +25,6 @@ app.add_middleware(
 )
 
 
-# Create an instance of Jinja2Templates and specify the directory containing the templates
-templates = Jinja2Templates(directory="templates")
-
-
 def apt_file_search(filename_str: str) -> str:
     """
     Executes 'apt-file search' with the given filename_str and returns the result.
