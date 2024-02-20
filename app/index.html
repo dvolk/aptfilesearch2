@@ -197,7 +197,7 @@
           const performSearch = (query) => {
             setIsLoading(true);
             setQuery(query);
-            fetch(`https://aptfilesearch.oxfordfun.com/query_api?q=${encodeURIComponent(query)}`)
+            fetch(`https://api.aptfilesearch.oxfordfun.com/query_api?q=${encodeURIComponent(query)}`)
               .then(response => response.json())
               .then(data => {
                 setSearchResults(data);
