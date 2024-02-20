@@ -53,7 +53,7 @@ async def async_apt_file_search(filename_str: str) -> list:
 @app.get("/query_api")
 async def read_query_api(q: str = None):
     if q:
-        output = {"results": await apt_file_search(q)}
+        output = {"results": await async_apt_file_search(q)}
     else:
         output = {"results": []}
 
