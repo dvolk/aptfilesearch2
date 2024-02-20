@@ -1,0 +1,226 @@
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <title>Apt file search</title>
+
+      <!-- React and ReactDOM CDN Links -->
+      <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+      <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+
+      <!-- Babel CDN -->
+      <script src="https://unpkg.com/@babel/standalone"></script>
+      <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"/>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+
+      <!-- fonts -->
+      <link rel="preconnect" href="https://fonts.googleapis.com"/>
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+      <link href="https://fonts.googleapis.com/css2?family=Protest+Riot&display=swap" rel="stylesheet"/>
+      <link href="https://fonts.googleapis.com/css2?family=Protest+Riot&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet"/>
+
+      <style>
+        .protest-riot-regular {
+          font-family: "Protest Riot", sans-serif;
+          font-weight: 400;
+          font-style: normal;
+        }
+        .roboto-regular {
+          font-family: "Roboto", sans-serif;
+          font-weight: 400;
+          font-style: normal;
+        }
+
+        pre { white-space: pre-wrap }
+        a { text-decoration: none; }
+
+        .spinner-container {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh; /* Use the full height of the viewport */
+        }
+
+        .spinner {
+          border: 4px solid rgba(0,0,0,.1);
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          border-left-color: transparent;
+          animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      </style>
+    </head>
+
+    <body class="w3-white">
+      <div id="root"></div>
+      <script type="text/babel">
+
+
+        function SearchPage({ onSearch }) {
+          const [query, setQuery] = React.useState('');
+
+          const handleSubmit = (e) => {
+            e.preventDefault();
+            onSearch(query);
+          };
+          return (
+            <center>
+              <div style={{ minWidth: '500px', width: '25%', marginTop: '25%' }}>
+
+                <h1 style={{ fontSize: '3.5em' }} className="protest-riot-regular">
+                  <a href="/">Apt file search</a>
+                </h1>
+
+                <form onSubmit={handleSubmit}>
+                  <p>
+                    <input
+                      type="text"
+                      value={query}
+                      onChange={(e) => setQuery(e.target.value)}
+                      className="w3-input w3-border roboto-regular"
+                      style={{ padding: '10px', paddingLeft: '20px', borderRadius: '20px' }}
+                      name="q"
+                      placeholder="Enter file name, eg: nginx.conf"
+                    />
+                  </p>
+
+                  <button
+                    style={{ width: '150px', borderRadius: '10px' }}
+                    className="w3-input w3-light-gray roboto-regular"
+                    type="submit">
+                    File Search
+                  </button>
+                </form>
+              </div>
+            </center>
+          );
+        }
+
+
+        function ResultsPage({ onSearch, result, q }) {
+
+          const [query, setQuery] = React.useState('');
+          const handleSubmit = (e) => {
+            e.preventDefault();
+            onSearch(query);
+          };
+
+          return (
+            <center>
+              <div style={{ minWidth: '1000px', width: '75%' }}>
+
+                <h1 style={{ fontSize: '2em' }} className="protest-riot-regular">
+                  <a href="/">
+                    Apt file search
+                  </a>
+                </h1>
+
+                <form onSubmit={handleSubmit}>
+                  <p>
+                    <input
+                      onChange={(e) => setQuery(e.target.value)}
+                      className="w3-input w3-border roboto-regular"
+                      style={{ padding: '10px', paddingLeft: '20px', borderRadius: '20px' }}
+                      type="text"
+                      name="q"
+                      minLength={2}
+                      defaultValue={q}
+                    />
+                  </p>
+                  <button
+                    style={{ width: '150px', borderRadius: '10px' }}
+                    className="w3-input w3-light-gray roboto-regular"
+                    type="submit"
+                  >
+                    File Search
+                  </button>
+                </form>
+                <br/>
+
+                {
+                  !result.results.length ? (
+                    <span>
+                      <h2>Sorry, no results found for '{q}'.</h2>
+                    </span>
+                  ) : (
+                    <div className="roboto-regular" style={{ paddingLeft: '10px', textAlign: 'left' }}>
+                      <h2>{result.results.length} results for '{q}':</h2>
+                      <table style={{ width: '100%' }}>
+                        <tbody>
+                          {result.results.map((line, index) => (
+                            <tr key={index}>
+                              <td>
+                                <span
+                                  className="roboto-regular"
+                                  style={{ color: 'blue', textAlign: 'left', borderRadius: '10px', padding: '3px', paddingLeft: '10px', paddingRight: '10px' }}>
+                                  <a
+                                    nofollow="true"
+                                    rel="noreferrer"
+                                    target="_blank"
+                                    href={`https://packages.ubuntu.com/jammy/${line[0]}`}>
+                                    {line[0]}
+                                  </a>
+                                </span>
+                              </td>
+                              <td>
+                                <span className="roboto-regular">
+                                  {line[1]}
+                                </span>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )
+                }
+
+              </div>
+            </center>
+          );
+        }
+
+
+        function App() {
+          const [page, setPage] = React.useState('search');
+          const [searchResults, setSearchResults] = React.useState([]);
+          const [query, setQuery] = React.useState('');
+          const [isLoading, setIsLoading] = React.useState(false);
+
+          const performSearch = (query) => {
+            setIsLoading(true);
+            setQuery(query);
+            fetch(`https://aptfilesearch.oxfordfun.com/query_api?q=${encodeURIComponent(query)}`)
+              .then(response => response.json())
+              .then(data => {
+                setSearchResults(data);
+                setPage('results');
+                setIsLoading(false);
+              })
+              .catch(error => {
+                console.error('Error fetching data:', error);
+                setIsLoading(false); // Stop loading on error
+              });
+          };
+
+          return (
+            <div>
+              {isLoading && <div className="spinner-container"><div className="spinner"></div></div>}
+              {!isLoading && page === 'search' && <SearchPage onSearch={performSearch} />}
+              {!isLoading && page === 'results' && <ResultsPage onSearch={performSearch} result={searchResults} q={query} />}
+            </div>
+          );
+        }
+
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+      </script>
+    </body>
+  </html>
