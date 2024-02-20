@@ -26,7 +26,7 @@ sudo apt-file update
 git clone https://github.com/dvolk/aptfilesearch2/api
 cd aptfilesearch2/api
 python3 -m venv env
-./env/bin/pip install fastapi uvicorn jinja2
+./env/bin/pip install fastapi uvicorn
 ```
 
 ## API Running
