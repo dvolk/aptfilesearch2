@@ -5,6 +5,7 @@ from fastapi.responses import HTMLResponse
 from subprocess import Popen, PIPE, STDOUT
 import shlex
 import asyncio
+from functoools import cache
 
 # Create an instance of the FastAPI class
 app = FastAPI()
@@ -26,6 +27,7 @@ app.add_middleware(
 )
 
 
+@cache
 def apt_file_search(filename_str: str) -> str:
     """
     Executes 'apt-file search' with the given filename_str and returns the result.
