@@ -80,8 +80,8 @@
             <center>
               <div style={{ minWidth: '500px', width: '25%', marginTop: '25%' }}>
 
-                <h1 style={{ fontSize: '3.5em' }} className="protest-riot-regular">
-                  <a href="/">Apt file search</a>
+                <h1 style={{ fontSize: '3.5em', cursor: 'pointer' }} className="protest-riot-regular">
+                  Apt file search
                 </h1>
 
                 <form onSubmit={handleSubmit}>
@@ -110,7 +110,7 @@
         }
 
 
-        function ResultsPage({ onSearch, result, q }) {
+        function ResultsPage({ onSearch, result, q, onLogoClick }) {
 
           const [query, setQuery] = React.useState('');
           const handleSubmit = (e) => {
@@ -122,10 +122,8 @@
             <center>
               <div style={{ minWidth: '1000px', width: '75%' }}>
 
-                <h1 style={{ fontSize: '2em' }} className="protest-riot-regular">
-                  <a href="/">
-                    Apt file search
-                  </a>
+                <h1 style={{ fontSize: '2em', cursor: 'pointer'}} onClick={onLogoClick} className="protest-riot-regular">
+                  Apt file search
                 </h1>
 
                 <form onSubmit={handleSubmit}>
@@ -200,9 +198,20 @@
           const [query, setQuery] = React.useState('');
           const [isLoading, setIsLoading] = React.useState(false);
 
+          React.useEffect(() => {
+            // Extract query from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const query = urlParams.get('q');
+            if (query) {
+              performSearch(query);
+            }
+          }, []);
+
           const performSearch = (query) => {
             setIsLoading(true);
             setQuery(query);
+            // Update the URL with the search query
+            window.history.pushState({}, '', '?q=' + encodeURIComponent(query));
             fetch(`https://aptfilesearch-api.oxfordfun.com/query_api?q=${encodeURIComponent(query)}`)
               .then(response => response.json())
               .then(data => {
@@ -216,11 +225,18 @@
               });
           };
 
+          const handleLogoClick = () => {
+            setPage('search');
+            setQuery(''); // Reset query state
+            setSearchResults([]); // Optionally clear previous search results
+            window.history.pushState({}, '', '/'); // Clear the query string in the URL
+          };
+
           return (
             <div>
               {isLoading && <div className="spinner-container"><div className="spinner"></div></div>}
               {!isLoading && page === 'search' && <SearchPage onSearch={performSearch} />}
-              {!isLoading && page === 'results' && <ResultsPage onSearch={performSearch} result={searchResults} q={query} />}
+              {!isLoading && page === 'results' && <ResultsPage onSearch={performSearch} result={searchResults} onLogoClick={handleLogoClick} q={query} />}
             </div>
           );
         }
